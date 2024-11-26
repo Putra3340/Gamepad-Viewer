@@ -45,6 +45,8 @@
             this.pad_circle = new System.Windows.Forms.PictureBox();
             this.pad_square = new System.Windows.Forms.PictureBox();
             this.pad_triangle = new System.Windows.Forms.PictureBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -89,6 +91,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -131,6 +134,7 @@
             // Preview1
             // 
             this.Preview1.Controls.Add(this.tabPage4);
+            this.Preview1.Controls.Add(this.tabPage3);
             this.Preview1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Preview1.Location = new System.Drawing.Point(3, 271);
             this.Preview1.Name = "Preview1";
@@ -254,6 +258,25 @@
             this.pad_triangle.TabStop = false;
             this.pad_triangle.Visible = false;
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(727, 333);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "tabPage3";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(174, 156);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "label2";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -298,6 +321,8 @@
         private System.Windows.Forms.PictureBox pad_paddown;
         private System.Windows.Forms.PictureBox pad_padright;
         private System.Windows.Forms.PictureBox pad_padleft;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Label label2;
     }
 }
 

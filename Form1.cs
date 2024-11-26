@@ -19,6 +19,60 @@ namespace Gamepad_Viewer
 
             //debug
             Pad();
+            Pad2();
+            Pads.move();
+            //Todo =
+            //Logging
+            //Settings
+            //Custom Skin
+            //Remapping
+            //Multiple Controller
+            //Control Windows Cursor
+        }
+
+        private async Task Pad2()
+        {
+            // Create a new controller instance
+            Controller controller = new Controller(UserIndex.Two);
+
+            // Check if the controller is connected
+            if (!controller.IsConnected)
+            {
+                label2.Text = "Controller not connected.";
+                return;
+            }
+
+            label2.Text = "Controller connected.";
+
+            // Continuously poll for input
+            while (true)
+            {
+                // Get the current state of the controller
+                var state = controller.GetState();
+
+                // Access joystick, triggers, and buttons
+                var leftStick = state.Gamepad.LeftThumbX;
+                var rightStick = state.Gamepad.RightThumbX;
+                var leftTrigger = state.Gamepad.LeftTrigger;
+                var rightTrigger = state.Gamepad.RightTrigger;
+                var buttons = state.Gamepad.Buttons;
+
+                //update to global string
+                Pads.ActiveButtons = buttons.ToString();
+                UpdateButtons();
+
+                // Display the data (concatenate into one string to avoid overwriting issues)
+                label2.Text = $"LeftStick: {leftStick}, RightStick: {rightStick}\n" +
+                              $"LeftTrigger: {leftTrigger}, RightTrigger: {rightTrigger}\n" +
+                              $"Buttons: {buttons}";
+
+
+
+
+                // Use Task.Delay to allow the UI thread to remain responsive
+                // 60 fps - Input Delay
+                await Task.Delay(20);
+            }
         }
 
         private async Task Pad()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -45,6 +46,41 @@ namespace Gamepad_Viewer
         // Todo : Right Analog
 
 
-        
+        #region Cursor
+        // Import the SetCursorPos function from user32.dll
+        [DllImport("user32.dll")]
+        private static extern bool SetCursorPos(int x, int y);
+
+        // Import the GetCursorPos function from user32.dll
+        [DllImport("user32.dll")]
+        private static extern bool GetCursorPos(out POINT lpPoint);
+
+        // Define a POINT structure to hold the cursor position
+        private struct POINT
+        {
+            public int X;
+            public int Y;
+        }
+        #endregion
+        public static async void move()
+        {
+            for (int i = 0; i < 600; i++)
+            {
+
+                // Get the current cursor position
+                if (GetCursorPos(out POINT currentPos))
+                {
+
+                    // Move the cursor down by 100 pixels
+                    int newX = currentPos.X;
+                    int newY = currentPos.Y + 1;
+
+                    // Apply the new position
+                    SetCursorPos(newX, newY);
+                    await Task.Delay(20);
+
+                }
+            }
+        }
     }
 }
