@@ -32,13 +32,14 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.Preview1 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.pad_padleft = new System.Windows.Forms.PictureBox();
             this.pad_padright = new System.Windows.Forms.PictureBox();
+            this.pad_padleft = new System.Windows.Forms.PictureBox();
             this.pad_paddown = new System.Windows.Forms.PictureBox();
             this.pad_padup = new System.Windows.Forms.PictureBox();
             this.pad_cross = new System.Windows.Forms.PictureBox();
@@ -46,14 +47,15 @@
             this.pad_square = new System.Windows.Forms.PictureBox();
             this.pad_triangle = new System.Windows.Forms.PictureBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.label2 = new System.Windows.Forms.Label();
+            this.debug_check = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.Preview1.SuspendLayout();
             this.tabPage4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pad_padleft)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pad_padright)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pad_padleft)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pad_paddown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pad_padup)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pad_cross)).BeginInit();
@@ -102,6 +104,15 @@
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(174, 156);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "label2";
+            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(413, 104);
@@ -123,6 +134,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.debug_check);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -162,18 +174,6 @@
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "tabPage4";
             // 
-            // pad_padleft
-            // 
-            this.pad_padleft.BackColor = System.Drawing.Color.Transparent;
-            this.pad_padleft.Image = ((System.Drawing.Image)(resources.GetObject("pad_padleft.Image")));
-            this.pad_padleft.Location = new System.Drawing.Point(189, 123);
-            this.pad_padleft.Name = "pad_padleft";
-            this.pad_padleft.Size = new System.Drawing.Size(28, 28);
-            this.pad_padleft.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pad_padleft.TabIndex = 7;
-            this.pad_padleft.TabStop = false;
-            this.pad_padleft.Visible = false;
-            // 
             // pad_padright
             // 
             this.pad_padright.BackColor = System.Drawing.Color.Transparent;
@@ -185,6 +185,18 @@
             this.pad_padright.TabIndex = 6;
             this.pad_padright.TabStop = false;
             this.pad_padright.Visible = false;
+            // 
+            // pad_padleft
+            // 
+            this.pad_padleft.BackColor = System.Drawing.Color.Transparent;
+            this.pad_padleft.Image = ((System.Drawing.Image)(resources.GetObject("pad_padleft.Image")));
+            this.pad_padleft.Location = new System.Drawing.Point(189, 123);
+            this.pad_padleft.Name = "pad_padleft";
+            this.pad_padleft.Size = new System.Drawing.Size(28, 28);
+            this.pad_padleft.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pad_padleft.TabIndex = 7;
+            this.pad_padleft.TabStop = false;
+            this.pad_padleft.Visible = false;
             // 
             // pad_paddown
             // 
@@ -268,14 +280,16 @@
             this.tabPage3.Text = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // label2
+            // debug_check
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(174, 156);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "label2";
+            this.debug_check.AutoSize = true;
+            this.debug_check.Location = new System.Drawing.Point(86, 24);
+            this.debug_check.Name = "debug_check";
+            this.debug_check.Size = new System.Drawing.Size(99, 17);
+            this.debug_check.TabIndex = 0;
+            this.debug_check.Text = "Debug Console";
+            this.debug_check.UseVisualStyleBackColor = true;
+            this.debug_check.CheckedChanged += new System.EventHandler(this.debug_check_CheckedChanged);
             // 
             // Form1
             // 
@@ -289,10 +303,12 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.Preview1.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pad_padleft)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pad_padright)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pad_padleft)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pad_paddown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pad_padup)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pad_cross)).EndInit();
@@ -323,6 +339,7 @@
         private System.Windows.Forms.PictureBox pad_padleft;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox debug_check;
     }
 }
 
