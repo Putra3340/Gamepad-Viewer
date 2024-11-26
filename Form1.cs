@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -22,7 +23,6 @@ namespace Gamepad_Viewer
 
             //debug
             Pad();
-            Pad2();
 
             //Todo =
             //Logging
@@ -31,51 +31,6 @@ namespace Gamepad_Viewer
             //Remapping
             //Multiple Controller
             //Control Windows Cursor
-        }
-
-        private async Task Pad2()
-        {
-            // Create a new controller instance
-            Controller controller = new Controller(UserIndex.Two);
-
-            // Check if the controller is connected
-            if (!controller.IsConnected)
-            {
-                label2.Text = "Controller not connected.";
-                return;
-            }
-
-            label2.Text = "Controller connected.";
-
-            // Continuously poll for input
-            while (true)
-            {
-                // Get the current state of the controller
-                var state = controller.GetState();
-
-                // Access joystick, triggers, and buttons
-                var leftStick = state.Gamepad.LeftThumbX;
-                var rightStick = state.Gamepad.RightThumbX;
-                var leftTrigger = state.Gamepad.LeftTrigger;
-                var rightTrigger = state.Gamepad.RightTrigger;
-                var buttons = state.Gamepad.Buttons;
-
-                //update to global string
-                Pads.ActiveButtons = buttons.ToString();
-                UpdateButtons();
-
-                // Display the data (concatenate into one string to avoid overwriting issues)
-                label2.Text = $"LeftStick: {leftStick}, RightStick: {rightStick}\n" +
-                              $"LeftTrigger: {leftTrigger}, RightTrigger: {rightTrigger}\n" +
-                              $"Buttons: {buttons}";
-
-
-
-
-                // Use Task.Delay to allow the UI thread to remain responsive
-                // 60 fps - Input Delay
-                await Task.Delay(20);
-            }
         }
 
         private async Task Pad()
@@ -107,10 +62,15 @@ namespace Gamepad_Viewer
 
                 //update to global string
                 Pads.ActiveButtons = buttons.ToString();
+                Pads.LX = leftStick;
+                Pads.LY = state.Gamepad.LeftThumbY;
+                Pads.RX = rightStick;
+                Pads.RY = state.Gamepad.RightThumbY;
                 UpdateButtons();
-
+                Pointer.Start();
                 // Display the data (concatenate into one string to avoid overwriting issues)
                 label1.Text = $"LeftStick: {leftStick}, RightStick: {rightStick}\n" +
+                                $"LeftStick: {state.Gamepad.LeftThumbY}, RightStick: {state.Gamepad.RightThumbY}\n" +
                               $"LeftTrigger: {leftTrigger}, RightTrigger: {rightTrigger}\n" +
                               $"Buttons: {buttons}";
 
@@ -181,6 +141,7 @@ namespace Gamepad_Viewer
 
             foreach (var entry in buttonMap)
             {
+                // Todo : Bugs if select pressed it should not press the circle
                 entry.Value.Visible = Pads.ActiveButtons.Contains(entry.Key);
             }
 
@@ -195,64 +156,35 @@ namespace Gamepad_Viewer
         {
 
         }
-        private void CreatePictureBoxWithChromaKey()
-        {
-            PictureBox pictureBox = new PictureBox
-            {
-                Location = new Point(3, 258), // Set position (X: 50, Y: 100)
-                Size = new Size(794, 341),     // Set size (Width: 400, Height: 300)
-                SizeMode = PictureBoxSizeMode.Zoom,
-                BackColor = Color.Lime, // Set BackColor to Lime
-                TabIndex = 2, // Set TabIndex to 1
-                TabStop = false // Optional: Disable tab navigation for PictureBox
-            };
-            this.Controls.Add(pictureBox);
-
-            // Load the image with transparency
-            Bitmap transparentImage = new Bitmap("raw\\triangle.png"); // Replace with your image path
-
-            // Apply chroma key to remove Lime background
-            Bitmap processedImage = ApplyChromaKeyOnBackColor(transparentImage, Color.Lime);
-            pictureBox.Image = processedImage;
-            
-        }
-
-        private Bitmap ApplyChromaKeyOnBackColor(Bitmap image, Color chromaKey)
-        {
-            Bitmap result = new Bitmap(image.Width, image.Height);
-
-            for (int y = 0; y < image.Height; y++)
-            {
-                for (int x = 0; x < image.Width; x++)
-                {
-                    Color pixelColor = image.GetPixel(x, y);
-
-                    // Replace chroma key color (lime) with transparency
-                    if (pixelColor.ToArgb() == chromaKey.ToArgb())
-                    {
-                        result.SetPixel(x, y, Color.FromArgb(0, 0, 0, 0)); // Fully transparent
-                    }
-                    else
-                    {
-                        result.SetPixel(x, y, pixelColor);
-                    }
-                }
-            }
-
-            return result;
-        }
 
         private async void button1_Click_1(object sender, EventArgs e)
         {
-            await Pad();
+            Pad();
+            Pointer.Start();
         }
 
         private void debug_check_CheckedChanged(object sender, EventArgs e)
         {
-            if(debug_check.Checked)
+            if (debug_check.Checked)
             {
                 Dev.Init();
-            }else { Dev.Close(); }
+                Dev.Log($"Gamepad Viewer v{Assembly.GetExecutingAssembly().GetName().Version}");
+            }
+            else { Dev.Close(); }
+        }
+
+        private void Pointer_Check_CheckedChanged(object sender, EventArgs e)
+        {
+            if(Pointer_Check.Checked)
+            {
+                Dev.Log("Gamepad Controlling is Activated");
+                Pointer.IsPointerActive = true;
+            }
+            else
+            {
+                Dev.Log("Gamepad Controlling is Disabled");
+                Pointer.IsPointerActive = false;
+            }
         }
     }
 }

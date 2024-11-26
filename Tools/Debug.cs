@@ -22,12 +22,14 @@ namespace Gamepad_Viewer.Tools
             {
                 MessageBox.Show("Console window is already open.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            Console.Title = "Gamepad Viewer";
         }
-            
-        public static void Log(string log)
+        
+        public static void Log(string log, ConsoleColor col = ConsoleColor.White)
         {
             // Log messages to the console
-            Console.WriteLine($"{DateTime.Now}: This is a log message.");
+            Console.ForegroundColor = col;
+            Console.WriteLine($"{DateTime.Now}: {log}");
         }
 
         public static void Close()
