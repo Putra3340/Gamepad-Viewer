@@ -16,7 +16,8 @@ namespace Gamepad_Viewer
         public static readonly string Right = "Right";
         public static readonly string Down = "Down";
         public static bool IsPointerActive = false;
-        private static int speed = 20; // Todo : Dynamic speed on cursor
+        private static int speed = 10; // Todo : Dynamic speed on cursor
+        private static int cooldown = 0;
 
         // Import the SetCursorPos function from user32.dll
         [DllImport("user32.dll")]
@@ -25,6 +26,18 @@ namespace Gamepad_Viewer
         // Import the GetCursorPos function from user32.dll
         [DllImport("user32.dll")]
         private static extern bool GetCursorPos(out POINT lpPoint);
+
+        // Declare the mouse_event function from user32.dll
+        [DllImport("user32.dll")]
+        public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint dwData, uint dwExtraInfo);
+
+        // Constants for mouse events
+        const uint MOUSEEVENTF_LEFTDOWN = 0x0002;
+        const uint MOUSEEVENTF_LEFTUP = 0x0004;
+        const uint MOUSEEVENTF_RIGHTDOWN = 0x0008;
+        const uint MOUSEEVENTF_RIGHTUP = 0x0010;
+        const uint MOUSEEVENTF_MIDDLEDOWN = 0x0020;
+        const uint MOUSEEVENTF_MIDDLEUP = 0x0040;
 
         // Define a POINT structure to hold the cursor position
         private struct POINT
@@ -38,7 +51,25 @@ namespace Gamepad_Viewer
             if (!IsPointerActive) return;
             Calculate(); // Process the analog input
         }
+        public static async Task DoAction()
+        {
+            if(!IsPointerActive) return;
+                if (Pads.ActiveButtons.Contains(Pads.Cross))
+                {
+                    // Simulate a left mouse click
+                    mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);  // Mouse button down
+                    mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);    // Mouse button up
 
+
+            }
+            if (Pads.ActiveButtons.Contains(Pads.Triangle))
+                {
+                    // Simulate right mouse click
+                    mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0); // Mouse button down
+                    mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0);   // Mouse button up
+
+            }
+        }
         private static async Task Calculate()
         {
 

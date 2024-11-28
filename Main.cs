@@ -14,16 +14,16 @@ using SharpDX.XInput;
 
 namespace Gamepad_Viewer
 {
-    public partial class Form1 : Form
+    public partial class Main : Form
     {
 
-        public Form1()
+        public Main()
         {
             InitializeComponent();
 
             //debug
             Pad();
-
+            Dev.Init();
             //Todo =
             //Logging
             //Settings
@@ -31,6 +31,7 @@ namespace Gamepad_Viewer
             //Remapping
             //Multiple Controller
             //Control Windows Cursor
+            //Button Holding
         }
 
         private async Task Pad()
@@ -46,10 +47,11 @@ namespace Gamepad_Viewer
             }
 
             label1.Text = "Controller connected.";
-
+            int cooldown = 0;
             // Continuously poll for input
             while (true)
             {
+                cooldown += 1;
                 // Get the current state of the controller
                 var state = controller.GetState();
 
@@ -66,8 +68,7 @@ namespace Gamepad_Viewer
                 Pads.LY = state.Gamepad.LeftThumbY;
                 Pads.RX = rightStick;
                 Pads.RY = state.Gamepad.RightThumbY;
-                UpdateButtons();
-                Pointer.Start();
+
                 // Display the data (concatenate into one string to avoid overwriting issues)
                 label1.Text = $"LeftStick: {leftStick}, RightStick: {rightStick}\n" +
                                 $"LeftStick: {state.Gamepad.LeftThumbY}, RightStick: {state.Gamepad.RightThumbY}\n" +
@@ -75,11 +76,18 @@ namespace Gamepad_Viewer
                               $"Buttons: {buttons}";
 
 
-                
 
+                // Action
+                UpdateButtons();
+                Pointer.Start();
+                if (cooldown % 20 == 0)
+                {
+                    // Experimental feature
+                    await Pointer.DoAction();
+                }
                 // Use Task.Delay to allow the UI thread to remain responsive
-                // 60 fps - Input Delay
-                await Task.Delay(20);
+                // Capturing Speed
+                await Task.Delay(1);
             }
         }
 
@@ -167,10 +175,10 @@ namespace Gamepad_Viewer
         {
             if (debug_check.Checked)
             {
-                Dev.Init();
+                Dev.Show();
                 Dev.Log($"Gamepad Viewer v{Assembly.GetExecutingAssembly().GetName().Version}");
             }
-            else { Dev.Close(); }
+            else { Dev.Hide(); }
         }
 
         private void Pointer_Check_CheckedChanged(object sender, EventArgs e)
