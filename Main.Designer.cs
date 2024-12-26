@@ -36,6 +36,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.Pointer_Check = new System.Windows.Forms.CheckBox();
             this.debug_check = new System.Windows.Forms.CheckBox();
             this.Preview1 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -48,7 +49,7 @@
             this.pad_square = new System.Windows.Forms.PictureBox();
             this.pad_triangle = new System.Windows.Forms.PictureBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.Pointer_Check = new System.Windows.Forms.CheckBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -135,6 +136,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.textBox1);
             this.tabPage2.Controls.Add(this.Pointer_Check);
             this.tabPage2.Controls.Add(this.debug_check);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -144,6 +146,17 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // Pointer_Check
+            // 
+            this.Pointer_Check.AutoSize = true;
+            this.Pointer_Check.Location = new System.Drawing.Point(86, 68);
+            this.Pointer_Check.Name = "Pointer_Check";
+            this.Pointer_Check.Size = new System.Drawing.Size(113, 17);
+            this.Pointer_Check.TabIndex = 1;
+            this.Pointer_Check.Text = "Gamepad Controls";
+            this.Pointer_Check.UseVisualStyleBackColor = true;
+            this.Pointer_Check.CheckedChanged += new System.EventHandler(this.Pointer_Check_CheckedChanged);
             // 
             // debug_check
             // 
@@ -293,24 +306,22 @@
             this.tabPage3.Text = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // Pointer_Check
+            // textBox1
             // 
-            this.Pointer_Check.AutoSize = true;
-            this.Pointer_Check.Location = new System.Drawing.Point(86, 68);
-            this.Pointer_Check.Name = "Pointer_Check";
-            this.Pointer_Check.Size = new System.Drawing.Size(113, 17);
-            this.Pointer_Check.TabIndex = 1;
-            this.Pointer_Check.Text = "Gamepad Controls";
-            this.Pointer_Check.UseVisualStyleBackColor = true;
-            this.Pointer_Check.CheckedChanged += new System.EventHandler(this.Pointer_Check_CheckedChanged);
+            this.textBox1.Location = new System.Drawing.Point(307, 24);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(396, 171);
+            this.textBox1.TabIndex = 2;
             // 
-            // Form1
+            // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(741, 633);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Name = "Form1";
+            this.Name = "Main";
             this.Text = "Form1";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
@@ -354,6 +365,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox debug_check;
         private System.Windows.Forms.CheckBox Pointer_Check;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

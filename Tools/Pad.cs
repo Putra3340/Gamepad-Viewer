@@ -50,5 +50,25 @@ namespace Gamepad_Viewer
         public static string Start = "Start";
         public static string Select = "Back";
 
+        //Buttton holding state
+        public static bool isHoldingTriangle = false;
+        public static bool isHoldingSquare = false;
+        public static bool isHoldingCircle = false;
+        public static bool isHoldingCross = false;
+        public static bool isHoldingPadUp = false;
+        public static bool isHoldingPadLeft = false;
+        public static bool isHoldingPadRight = false;
+        public static bool isHoldingPadDown = false;
+        public static bool isHoldingL1 = false;
+        public static bool isHoldingL2 = false;
+        public static bool isHoldingR1 = false;
+        public static bool isHoldingR2 = false;
+        public static bool isHoldingR3 = false;
+        public static bool isHoldingL3 = false;
+        public static bool isHoldingStart = false;
+        public static bool isHoldingSelect = false;
+
+
+        
     }
 }

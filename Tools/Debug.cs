@@ -12,73 +12,71 @@ namespace Gamepad_Viewer.Tools
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool FreeConsole();
 
-        // For showing or hiding the console window
         [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
-        // Getting the process window handle (Console window)
         [DllImport("kernel32.dll")]
         private static extern IntPtr GetConsoleWindow();
 
         private const int SW_HIDE = 0;
         private const int SW_SHOW = 5;
 
-        public async static void Init()
+        public static void Init()
         {
-            // Allocate console window only if not already allocated
             IntPtr hwnd = GetConsoleWindow();
             if (hwnd == IntPtr.Zero)
             {
-                // If no console exists, allocate it
+                // Allocate a new console
                 if (!AllocConsole())
                 {
-                    MessageBox.Show("Console window could not be created.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Failed to create console.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
+                Console.Title = "Gamepad Viewer";
             }
-
-            Console.Title = "Gamepad Viewer";
-
-            // Now try hiding the console window if possible
-            hwnd = GetConsoleWindow();
-            if (hwnd != IntPtr.Zero)
-            {
-                // Hide the console window
-                ShowWindow(hwnd, SW_HIDE);
-            }
+            Hide();
+            Console.Clear();
         }
 
-        public async static void Show()
+        public static void Show()
         {
             IntPtr hwnd = GetConsoleWindow();
             if (hwnd != IntPtr.Zero)
             {
-                // Show the console window
                 ShowWindow(hwnd, SW_SHOW);
             }
+            
         }
 
-        public async static void Hide()
+        public static void Hide()
         {
             IntPtr hwnd = GetConsoleWindow();
             if (hwnd != IntPtr.Zero)
             {
-                // Hide the console window
                 ShowWindow(hwnd, SW_HIDE);
             }
+            Console.Clear();
         }
 
-        public async static void Log(string log, ConsoleColor col = ConsoleColor.White)
+        public static void Log(string message, ConsoleColor color = ConsoleColor.White)
         {
-            // Log messages to the console
-            Console.ForegroundColor = col;
-            Console.WriteLine($"{DateTime.Now}: {log}");
+            if (GetConsoleWindow() == IntPtr.Zero)
+            {
+                Init();
+            }
+
+            Console.ForegroundColor = color;
+            Console.WriteLine($"{DateTime.Now}: {message}");
+            Console.ResetColor();
         }
 
-        public async static void Close()
+        public static void Close()
         {
-            // Close the console window
-            FreeConsole();
+            IntPtr hwnd = GetConsoleWindow();
+            if (hwnd != IntPtr.Zero)
+            {
+                FreeConsole();
+            }
         }
     }
 }

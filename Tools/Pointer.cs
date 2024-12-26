@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gamepad_Viewer.Tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -17,7 +18,8 @@ namespace Gamepad_Viewer
         public static readonly string Down = "Down";
         public static bool IsPointerActive = false;
         private static int speed = 10; // Todo : Dynamic speed on cursor
-        private static int cooldown = 0;
+        public static bool condition = false; // The main condition
+        public static bool hasExecuted = false; // Tracks if the action has been executed
 
         // Import the SetCursorPos function from user32.dll
         [DllImport("user32.dll")]
@@ -51,28 +53,36 @@ namespace Gamepad_Viewer
             if (!IsPointerActive) return;
             Calculate(); // Process the analog input
         }
-        public static async Task DoAction()
+        public static async Task<string> DoAction()
         {
-            if(!IsPointerActive) return;
-                if (Pads.ActiveButtons.Contains(Pads.Cross))
+            //while(true)
+            //{
+                if (Pads.isHoldingCross && !hasExecuted)
                 {
-                    // Simulate a left mouse click
-                    mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);  // Mouse button down
-                    mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);    // Mouse button up
+                    // Execute the code only once when condition becomes true
+                    Dev.Log("Condition is true. Executing action...");
+                    if (Pads.ActiveButtons.Contains(Pads.Cross))
+                    {
+                        // Simulate a left mouse click
+                        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);  // Mouse button down
+                        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);    // Mouse button up
 
 
-            }
-            if (Pads.ActiveButtons.Contains(Pads.Triangle))
+                    }
+                    hasExecuted = true; // Mark as executed
+                }
+                else if (!Pads.isHoldingCross)
                 {
-                    // Simulate right mouse click
-                    mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0); // Mouse button down
-                    mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0);   // Mouse button up
-
-            }
+                    // Reset the flag when condition becomes false
+                    hasExecuted = false;
+                }
+                Pads.isHoldingCross = !Pads.isHoldingCross;
+            //}
+            return "";
         }
         private static async Task Calculate()
         {
-
+            
             // Todo : Analog Speed
             // Todo : Add Custom Default Analog Deadzone
 

@@ -11,6 +11,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Gamepad_Viewer.Tools;
 using SharpDX.XInput;
+using Logging_Api;
+
+#pragma warning disable CS4014 //fuck the warning man
+#pragma warning disable CS1998
 
 namespace Gamepad_Viewer
 {
@@ -24,6 +28,7 @@ namespace Gamepad_Viewer
             //debug
             Pad();
             Dev.Init();
+            //Pointer.DoAction();
             //Todo =
             //Logging
             //Settings
@@ -32,26 +37,30 @@ namespace Gamepad_Viewer
             //Multiple Controller
             //Control Windows Cursor
             //Button Holding
+            //WebPAD ps3 integration
+            //Keyboard.Subscribe();
+            
         }
 
         private async Task Pad()
         {
             // Create a new controller instance
             Controller controller = new Controller(UserIndex.One);
-
+            //Pointer.DoAction();
             // Check if the controller is connected
             if (!controller.IsConnected)
             {
                 label1.Text = "Controller not connected.";
+                Dev.Log("Controller not connected.");
                 return;
             }
 
-            label1.Text = "Controller connected.";
-            int cooldown = 0;
+            Dev.Log("Controller 1 is connected!");
+            
             // Continuously poll for input
             while (true)
             {
-                cooldown += 1;
+                Pointer.DoAction();   
                 // Get the current state of the controller
                 var state = controller.GetState();
 
@@ -78,86 +87,49 @@ namespace Gamepad_Viewer
 
 
                 // Action
-                UpdateButtons();
+                UpdateButtons(); // i added pointer action on this
                 Pointer.Start();
-                if (cooldown % 20 == 0)
-                {
-                    // Experimental feature
-                    await Pointer.DoAction();
-                }
+                HoldState();
                 // Use Task.Delay to allow the UI thread to remain responsive
-                // Capturing Speed
+                // Polling rate 1000Hz
+                // Todo Custom Polling rate to run smoothly on slow cpu
                 await Task.Delay(1);
             }
         }
 
         private async void UpdateButtons()
         {
-
+            // i love ifs
             #region if
             //general
-            //if (Pads.ActiveButtons.Contains(Pads.Triangle))
-            //{
-            //    pad_triangle.Visible = true;
-            //}
-            //else
-            //{
-            //    pad_triangle.Visible = false;
-            //}
-            //if (Pads.ActiveButtons.Contains(Pads.Square))
-            //{
-            //    pad_square.Visible = true;
-            //}
-            //else
-            //{
-            //    pad_square.Visible = false;
-            //}
-            //if (Pads.ActiveButtons.Contains(Pads.Circle))
-            //{
-            //    pad_circle.Visible = true;
-            //}
-            //else
-            //{
-            //    pad_circle.Visible = false;
-            //}
-            //if (Pads.ActiveButtons.Contains(Pads.Cross))
-            //{
-            //    pad_cross.Visible = true;
-            //}
-            //else
-            //{
-            //    pad_cross.Visible = false;
-            //}
-            #endregion
-
-            //Damn dictionary condition
-            var buttonMap = new Dictionary<string, Control>
-{
-    //general
-    { Pads.Triangle, pad_triangle },
-    { Pads.Square, pad_square },
-    { Pads.Circle, pad_circle },
-    { Pads.Cross, pad_cross },
-
-    //dpad
-    { Pads.PadUp, pad_padup },
-    { Pads.PadDown, pad_paddown },
-    { Pads.PadRight, pad_padright },
-    { Pads.PadLeft, pad_padleft },
-     
-};
-
-            foreach (var entry in buttonMap)
+            if (Pads.ActiveButtons.Contains(Pads.Triangle)) { Pads.isHoldingTriangle = true; pad_triangle.Visible = true; } else { Pads.isHoldingTriangle = false; pad_triangle.Visible = false; }
+            if (Pads.ActiveButtons.Contains(Pads.Square)) {pad_square.Visible = true; }
+            else
             {
-                // Todo : Bugs if select pressed it should not press the circle
-                entry.Value.Visible = Pads.ActiveButtons.Contains(entry.Key);
+                pad_square.Visible = false;
+            }
+            if (Pads.ActiveButtons.Contains(Pads.Circle))
+            {
+                pad_circle.Visible = true;
+            }
+            else
+            {
+                pad_circle.Visible = false;
+            }
+            if (Pads.ActiveButtons.Contains(Pads.Cross))
+            {
+                Pads.isHoldingCross = true;
+                pad_cross.Visible = true;
+            }
+            else
+            {
+                Pads.isHoldingCross = false;
+                pad_cross.Visible = false;
             }
 
-
-        }
-
-        private async void button1_Click(object sender, EventArgs e)
-        {
+            // dpad
+            if(Pads.ActiveButtons.Contains(Pads.PadUp)) { Pads.isHoldingPadUp = true; pad_padup.Visible = true; } else { Pads.isHoldingPadUp = false; pad_padup.Visible = false; }
+            #endregion
         }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
@@ -192,6 +164,26 @@ namespace Gamepad_Viewer
             {
                 Dev.Log("Gamepad Controlling is Disabled");
                 Pointer.IsPointerActive = false;
+            }
+        }
+        private int circle = 0;
+        private void HoldState()
+        {
+            if (pad_circle.Visible) {
+                circle++;
+                if(circle == 100)
+                {
+                    return;
+                }
+                //if circle pressed for 200ms
+                if(circle > 500) {
+                    Dev.Log("Circle holded!!");
+                }
+            }
+            else
+            {
+                //reset state
+                circle = 0;
             }
         }
     }
